@@ -11,14 +11,8 @@ from rest_framework.views import APIView
 
 
 @ensure_csrf_cookie
-def set_csrf_token(request):
-    return JsonResponse({"ok": True})
-
-
-def get_csrf(request):
-    response = JsonResponse({'detail': 'CSRF cookie set'})
-    response['X-CSRFToken'] = get_token(request)
-    return response
+def get_csrf_token(request):
+    return JsonResponse({"message":"got CSRF token"})
 
 
 @require_POST
@@ -29,13 +23,13 @@ def login_view(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({"ok":True})
+        return JsonResponse({"message":'You are logged in'})
     else:
-        return JsonResponse({"ok": False})
+        return JsonResponse({"message":'Login failed'}, status=500)
 
 
 class CheckAuth(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
-        return JsonResponse({"ok": True})
+        return JsonResponse({"message": "You did it!"})

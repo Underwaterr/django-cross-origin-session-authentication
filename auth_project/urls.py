@@ -21,6 +21,5 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('login/', include('rest_framework.urls')),
+    path('auth/', include('auth_app.urls'))
 ]
