@@ -11,7 +11,7 @@
 
   let csrfToken = null
   tokenButton.addEventListener('click', function() {
-    fetch('http://localhost:8000/auth/set/')
+    fetch('http://localhost:8000/auth/get-csrf-token/', { credentials: 'include' })
       .then(response=> { 
         csrfToken = getCookie('csrftoken') 
       })
