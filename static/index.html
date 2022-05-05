@@ -1,0 +1,40 @@
+<button id="token-button">Get CSRF Token</button>
+<button id="login-button">Log In</button>
+<button id="test-button">Test</button>
+
+<script src="get-cookie.js"></script>
+
+<script>
+  let tokenButton = document.getElementById('token-button')
+  let loginButton = document.getElementById('login-button')
+  let testButton = document.getElementById('test-button')
+
+  let csrfToken = null
+  tokenButton.addEventListener('click', function() {
+    fetch('http://localhost:8000/auth/set/')
+      .then(response=> { 
+        csrfToken = getCookie('csrftoken') 
+      })
+  })
+
+  loginButton.addEventListener('click', function() {
+    let options = {
+      method: 'POST',
+      headers: { "X-CSRFToken": csrfToken },
+      credentials: 'include',
+      body: JSON.stringify({username:'admin', password:'admin'})
+    }
+    fetch('http://localhost:8000/auth/login/', options)
+  })
+
+  testButton.addEventListener('click', function() {
+    let options = {
+      headers: { "X-CSRFToken": csrfToken },
+      credentials: 'include'
+    }
+    fetch('http://localhost:8000/auth/test/', options)
+      .then(response=> response.json())
+      .then(data=> console.log(data))
+  })
+
+</script>
